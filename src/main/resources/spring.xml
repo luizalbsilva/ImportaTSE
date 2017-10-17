@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- Scans within the base package of the application for @Component classes to configure as beans -->
+    <context:component-scan base-package="br.org.merepresenta.importacao.*"/>
+
+    <context:annotation-config></context:annotation-config>
+    
+    <tx:annotation-driven transaction-manager="txManager"/>
+    
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+	    <property name="dataSource" ref="dataSource"/>
+	    <property name="hibernateProperties">
+	        <value>
+            hibernate.archive.autodetection=class
+            hibernate.show_sql=false
+            hibernate.format_sql=true
+            hibernate.hbm2ddl.auto=update
+            hibernate.dialect=org.hibernate.dialect.MySQL57Dialect
+	        </value>
+	    </property>
+	    <property name="packagesToScan">
+		    <list>
+		        <value>br.org.merepresenta.importacao.i2017.daos.consultas.vo</value>
+		    </list>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	    <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+	    <property name="url" value="jdbc:mysql://localhost/tse" />
+	    <property name="username" value="root" />
+	    <property name="password" value="12345678" />
+	</bean>
+
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager"
+		name="txManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean> 
+</beans>
