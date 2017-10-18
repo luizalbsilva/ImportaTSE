@@ -134,9 +134,10 @@ public class Importador implements br.org.merepresenta.importacao.i2017.Importad
 					System.out.println("\n===============================================================\nProcesando arquivo: " + f);
 					Consulta consulta = fabrica.instanciaConsultor(f);
 					GenericDao dao = fabrica.daoInstance();
+					System.out.print("       ");
 					try {
 						while(true) {
-							System.out.print("*");
+							System.out.printf("\b\b\b\b\b\b\b%07d", count);
 							Object next = consulta.next();
 							count++;
 							Object destino = fabrica.novaInstancia();
